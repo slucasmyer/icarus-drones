@@ -6,7 +6,7 @@ export default function ProTip() {
   return (
     <p className={`text-center`}>
       <EmailOutlinedIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-      <Link href="mailto:sullivan@primedeviation.com">Get in touch</Link>
+      <Link href="mailto:slucasmyer@icloud.com">Get in touch</Link>
     </p>
   );
 }

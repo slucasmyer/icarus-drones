@@ -5,7 +5,7 @@ import { TextField, Stack, Container } from '@mui/material'
 import Button from '@/components/Button'
 
 
-export default function Home(props: any) {
+export default function Features(props: any) {
   const [name, setName] = useState<string | null>(null)
   const [email, setEmail] = useState<string | null>(null)
   const [password, setPassword] = useState<string | null>(null)
@@ -28,7 +28,14 @@ export default function Home(props: any) {
   return (
     <Container maxWidth={`lg`}>
       <Stack direction={'column'} spacing={3} className={'page-content'}>
-      {Array(25).fill(undefined).map((_, i) => ( <h1 key={i} className={`self-center`}>DRONES FOR EVERYONE</h1> ))}
+        <h1 className={`self-center`}>Features</h1>
+        <TextField className={"self-center"} sx={{width:300}} id="name-input" label="Name" variant="outlined" type={`text`} color={`secondary`} onChange={onChange} />
+        <TextField className={"self-center"} sx={{width:300}} id="email-input" label="Email" variant="outlined" type={`text`} onChange={onChange} />
+        <TextField className={"self-center"} sx={{width:300}} id="password-input" label="Password" variant="outlined" type={`text`} onChange={onChange} />
+        <Button className={`btn-blue w-fit self-center`} onClick={async () => {
+          console.log(`name: ${name}, email: ${email}, password: ${password}`)
+          
+        }}>Submit</Button>
       </Stack>
     </Container>
   )
