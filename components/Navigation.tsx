@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { AppBar, Drawer, Slide, useScrollTrigger } from "@mui/material";
+import { AppBar, Slide, useScrollTrigger } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useRouter, usePathname } from "next/navigation";
 import Button from './Button';
@@ -27,6 +27,7 @@ export default function Navigation() {
           <Link href={`/employees`}><h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125`}>EMPLOYEES</h1></Link>
           <Link href={`/customers`}><h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125`}>CUSTOMERS</h1></Link>
           <Link href={`/suppliers`}><h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125`}>SUPPLIERS</h1></Link>
+          <Link href={`/assignments`}><h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125`}>ASSIGNMENTS</h1></Link>
         </nav>
       </AppBar>
     </Slide>
