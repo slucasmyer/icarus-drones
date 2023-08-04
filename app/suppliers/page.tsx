@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { TextField, Stack, Container } from '@mui/material';
+import { TextField, Stack, Container, Typography } from '@mui/material';
 import CRUDSelect from '@/components/CRUDSelect';
 import Button from '@/components/Button';
 import DataFrame from '@/components/DataFrame';
@@ -9,7 +9,7 @@ import { fetchTableData } from '@/utils/fetchTableData';
 
 export default function Suppliers(props: any) {
   const [queryType, setQueryType] = useState<string | null>(null);
-  const [supplierName, setSupplierName] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [location, setLocation] = useState<string | null>(null);
   const [phone, setPhone] = useState<string | null>(null);
@@ -30,8 +30,8 @@ export default function Suppliers(props: any) {
   const onChange = async (e: any) => {
     const { id, value } = e.currentTarget || e.target;
     switch (id) {
-      case 'supplierName-input':
-        setSupplierName(value);
+      case 'name-input':
+        setName(value);
         break;
       case 'email-input':
         setEmail(value);
@@ -48,7 +48,29 @@ export default function Suppliers(props: any) {
   };
 
   const onSubmit = async (e: any) => {
-    console.log(queryType, supplierName, email, location, phone)
+    console.log(name, email, location, phone)
+    try {
+      const route = `/api/records/create?table=${tableName}`;
+      const config = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, location: location, phone: phone })
+      }
+      const response = await fetch(route, config);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else {
+        fetchTableData(tableName, setSuppliers);
+        alert(`Created new row`);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        console.log(error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -60,9 +82,9 @@ export default function Suppliers(props: any) {
       <Stack direction={'column'} spacing={3} className={'page-content'}>
         <h1 className={`self-center`}>Suppliers</h1>
         <DataFrame tableName={tableName} rows={suppliers} setRows={setSuppliers} />
-        <CRUDSelect onChange={onQueryChange} />
-        <TextField className={"self-center"} sx={{width:300}} id="supplierName-input" label="Supplier Name" variant="outlined" type={`text`} color={`secondary`} onChange={onChange} />
-        <TextField className={"self-center"} sx={{width:300}} id="supplierEmail-input" label="Email" variant="outlined" type={`text`} color={`secondary`} onChange={onChange} />
+        {/*<CRUDSelect onChange={onQueryChange} />*/}
+        <TextField className={"self-center"} sx={{width:300}} id="name-input" label="Supplier Name" variant="outlined" type={`text`} color={`secondary`} onChange={onChange} />
+        <TextField className={"self-center"} sx={{width:300}} id="email-input" label="Email" variant="outlined" type={`text`} color={`secondary`} onChange={onChange} />
         <TextField className={"self-center"} sx={{width:300}} id="location-input" label="Location" variant="outlined" type={`text`} color={`secondary`} onChange={onChange} />
         <TextField className={"self-center"} sx={{width:300}} id="phone-input" label="Phone" variant="outlined" type={`text`} color={`secondary`} onChange={onChange} />
         <Button className={`btn-blue w-fit self-center`} onClick={onSubmit}>Submit</Button>
