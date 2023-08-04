@@ -1,10 +1,10 @@
 "use client"
-import Image from 'next/image'
-import { useState, useEffect, useContext } from 'react'
-import { TextField, Stack, Container } from '@mui/material'
-import CRUDSelect from '@/components/CRUDSelect'
-import Button from '@/components/Button'
+import { useState, useEffect } from 'react';
+import { TextField, Stack, Container } from '@mui/material';
+import CRUDSelect from '@/components/CRUDSelect';
+import Button from '@/components/Button';
 import DataFrame from '@/components/DataFrame';
+import { fetchTableData } from '@/utils/fetchTableData';
 
 
 export default function Features(props: any) {
@@ -14,12 +14,6 @@ export default function Features(props: any) {
   const [qtyInSupply, setQtyInSupply] = useState<number | null>(null);
   const [features, setFeatures] = useState<any[]>([]);
   const tableName = 'Features';
-  const columns = [
-    { field: 'featureID', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 150, editable: true },
-    { field: 'purchase_price', headerName: 'Purchase Price', width: 150, editable: true },
-    { field: 'qty_in_supply', headerName: 'Quantity in Supply', width: 150, editable: true },
-  ];
 
   const onQueryChange = async (e: any) => {
     const { id, value } = e.currentTarget || e.target;
@@ -54,18 +48,14 @@ export default function Features(props: any) {
   };
 
   useEffect(() => {
-    fetch(`/api/records/read?table=${tableName}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setFeatures(data);
-      });
+    fetchTableData(tableName, setFeatures);
   }, []);
 
   return (
     <Container maxWidth={`lg`}>
       <Stack direction={'column'} spacing={3} className={'page-content'}>
         <h1 className={`self-center`}>Features</h1>
-        <DataFrame tableName={tableName} rows={features} setRows={setFeatures} columns={columns} />
+        <DataFrame tableName={tableName} rows={features} setRows={setFeatures} />
         <CRUDSelect onChange={onQueryChange} />
         <TextField className={"self-center"} sx={{width:300}} id="featureName-input" label="Feature Name" variant="outlined" type={`text`} color={`secondary`} onChange={onChange} />
         <TextField className={"self-center"} sx={{width:300}} id="purchasePrice-input" label="Purchase Price" variant="outlined" type={`number`} color={`secondary`} onChange={onChange} />

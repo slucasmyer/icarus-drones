@@ -1,9 +1,10 @@
-"use client"
-import { useState, useEffect } from 'react'
-import { TextField, Stack, Container } from '@mui/material'
+"use client";
+import { useState, useEffect } from 'react';
+import { TextField, Stack, Container } from '@mui/material';
 import CRUDSelect from '@/components/CRUDSelect';
-import Button from '@/components/Button'
+import Button from '@/components/Button';
 import DataFrame from '@/components/DataFrame';
+import { fetchTableData } from '@/utils/fetchTableData';
 
 export default function Customers(props: any) {
   const [queryType, setQueryType] = useState<string | null>(null);
@@ -11,11 +12,7 @@ export default function Customers(props: any) {
   const [email, setEmail] = useState<string | null>(null);
   const [customers, setCustomers] = useState<any[]>([]);
   const tableName = 'Customers';
-  const columns = [
-    { field: 'customerID', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 150, editable: true },
-    { field: 'email', headerName: 'Email', width: 150, editable: true },
-  ];
+  
   const onQueryChange = async (e: any) => {
     const { id, value } = e.currentTarget || e.target;
     switch (id) {
@@ -46,18 +43,14 @@ export default function Customers(props: any) {
   };
 
   useEffect(() => {
-    fetch(`/api/records/read?table=${tableName}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setCustomers(data);
-      });
+    fetchTableData(tableName, setCustomers);
   }, []);
 
   return (
     <Container maxWidth={`lg`}>
       <Stack direction={'column'} spacing={3} className={'page-content'}>
         <h1 className={`self-center`}>Customers</h1>
-        <DataFrame tableName={tableName} rows={customers} setRows={setCustomers} columns={columns} />
+        <DataFrame tableName={tableName} rows={customers} setRows={setCustomers} />
         <CRUDSelect onChange={onQueryChange} />
         <TextField className={"self-center"} sx={{width:300}} id="customer-name-input" label="Customer Name" variant="outlined" type={`text`} color={`secondary`} onChange={onChange} />
         <TextField className={"self-center"} sx={{width:300}} id="customer-email-input" label="Customer Email" variant="outlined" type={`email`} color={`secondary`} onChange={onChange} />
