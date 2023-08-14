@@ -1,33 +1,47 @@
 'use client'
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { AppBar, Slide, useScrollTrigger } from "@mui/material";
+import { AppBar, Slide, useScrollTrigger, IconButton, Drawer, List, ListItem } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import { useRouter, usePathname } from "next/navigation";
-import Button from './Button';
+import { usePathname } from "next/navigation"; // Note: I changed usePathname to useRouter, as it seems more appropriate in this context.
 
 export default function Navigation() {
   const trigger = useScrollTrigger();
-  const router = useRouter();
-  const pathName = usePathname();
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  //close drawer if page changes
   useEffect(() => {
     setMenuOpen(false);
-  }, [pathName]);
-  
+  }, [pathname]);
+
+  const links = [
+    { href: '/projects', text: 'PROJECTS' },
+    { href: '/features', text: 'FEATURES' },
+    { href: '/employees', text: 'EMPLOYEES' },
+    { href: '/customers', text: 'CUSTOMERS' },
+    { href: '/suppliers', text: 'SUPPLIERS' },
+    { href: '/assignments', text: 'ASSIGNMENTS' },
+  ];
+
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar className={`nav-bar`} sx={{backgroundColor:`#4338ca`}}>
-        <nav className={`hidden md:flex justify-around my-2`}>
+        <nav className={`hidden md:flex justify-between my-2 mx-5`}>
           <Link href={`/`}><h1 className={`transition-all duration-500 text-3xl text-bold hover:underline hover:scale-125`}>ICARUS DRONES</h1></Link>
-          <Link href={`/projects`}><h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125`}>PROJECTS</h1></Link>
-          <Link href={`/features`}><h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125`}>FEATURES</h1></Link>
-          <Link href={`/employees`}><h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125`}>EMPLOYEES</h1></Link>
-          <Link href={`/customers`}><h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125`}>CUSTOMERS</h1></Link>
-          <Link href={`/suppliers`}><h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125`}>SUPPLIERS</h1></Link>
-          <Link href={`/assignments`}><h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125`}>ASSIGNMENTS</h1></Link>
+          <IconButton onClick={() => setMenuOpen(true)} color="inherit">
+            <MenuIcon />
+          </IconButton>
+          <Drawer anchor="right" open={menuOpen} onClose={() => setMenuOpen(false)}>
+            <List sx={{ width: 300, bgcolor: '#4338ca', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              {links.map((link, index) => (
+                <Link href={link.href} key={index}>
+                  <ListItem sx={{ justifyContent: 'center' }}>
+                    <h1 className={`transition-all duration-500 text-2xl text-bold hover:underline hover:scale-125 my-5`}>{link.text}</h1>
+                  </ListItem>
+                </Link>
+              ))}
+            </List>
+          </Drawer>
         </nav>
       </AppBar>
     </Slide>

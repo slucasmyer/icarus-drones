@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction } from 'react';
 import { DataGrid, GridColDef, GridCellParams, GridToolbar, GridRowId } from '@mui/x-data-grid';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { columnDefinitions } from '@/utils/columnDefinitions';
-//import { updateTableData } from '@/utils/updateTableData';
 
 type DataRow = {
   id: number;
@@ -14,7 +13,6 @@ type DataFrameProps = {
   rows: DataRow[];
   setRows: Dispatch<SetStateAction<DataRow[]>>;
 }
-
 
 
 export default function DataFrame ({ tableName, rows, setRows } : DataFrameProps) {
@@ -33,23 +31,22 @@ export default function DataFrame ({ tableName, rows, setRows } : DataFrameProps
         body: JSON.stringify({ field: field, value: value, valueType: valueType })
       }
       const response = await fetch(route, config);
-  
+      const body =  await response.json();
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`${body.error}`);
       } else {
-        alert(`Updated ${field} to ${value}`);
+        alert(`${body.message}`);
       }
   
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
       } else {
-        console.log(error);
+        console.log('weird error', error);
       }
     }
   };
   
-
 
 const deleteRow = async (id: GridRowId) => {
   try {
@@ -59,20 +56,19 @@ const deleteRow = async (id: GridRowId) => {
       headers: { 'Content-Type': 'application/json' },
     }
     const response = await fetch(route, config);
-
+    const body =  await response.json();
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`${body.error}`);
     } else {
-      const newRows = rows.filter((row) => row[tableID] !== id);
-      setRows(newRows);
-      alert(`Deleted row ${id}`);
+      setRows(rows.filter((row) => row[tableID] !== id));
+      alert(`${body.message}`);
     }
 
   } catch (error) {
     if (error instanceof Error) {
       alert(error.message);
     } else {
-      console.log(error);
+      console.log('weird error', error);
     }
   }
 }
@@ -104,7 +100,7 @@ const deleteColumn: GridColDef = {
             toolbar: GridToolbar,
           }}
           pageSizeOptions={[10]}
-          checkboxSelection
+          //checkboxSelection
           onRowSelectionModelChange={(e: any) => console.log(e)}
           disableRowSelectionOnClick
           initialState={{
