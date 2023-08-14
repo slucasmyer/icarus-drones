@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { AppBar, Slide, useScrollTrigger, IconButton, Drawer, List, ListItem } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import { usePathname } from "next/navigation"; // Note: I changed usePathname to useRouter, as it seems more appropriate in this context.
+import { usePathname } from "next/navigation";
 
 export default function Navigation() {
   const trigger = useScrollTrigger();
@@ -26,7 +26,7 @@ export default function Navigation() {
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar className={`nav-bar`} sx={{backgroundColor:`#4338ca`}}>
-        <nav className={`hidden md:flex justify-between my-2 mx-5`}>
+        <nav className={`hidden md:flex justify-between my-2 mx-10`}>
           <Link href={`/`}><h1 className={`transition-all duration-500 text-3xl text-bold hover:underline hover:scale-125`}>ICARUS DRONES</h1></Link>
           <IconButton onClick={() => setMenuOpen(true)} color="inherit">
             <MenuIcon />
