@@ -24,7 +24,6 @@ export async function PUT(request: NextRequest) {
   if (checks) {
     for (const check of checks) {
       if (field === check.field) {
-        console.log('check', check, 'typedValue', typedValue)
         const [rows] = await pool.query(check.query, [typedValue]);
         if (!rows || !Array.isArray(rows) || rows.length === 0) {
           console.log('rows', rows)

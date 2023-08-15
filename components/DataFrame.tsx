@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 import { DataGrid, GridColDef, GridCellParams, GridToolbar, GridRowId } from '@mui/x-data-grid';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { columnDefinitions } from '@/utils/columnDefinitions';
+import { Modal } from './modal';
 
 type DataRow = {
   id: number;
@@ -16,8 +17,11 @@ type DataFrameProps = {
 
 
 export default function DataFrame ({ tableName, rows, setRows } : DataFrameProps) {
-
+  const [open, setOpen] = useState(false);
+  const [modalContent, setModalContent] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
   const tableID = tableName == `EmployeesProjects` ? `employeeprojectID` : `${tableName.slice(0, -1).toLowerCase()}ID`;
+  
   
   const postChange = async (params: GridCellParams, event: any) => {
     try {
@@ -35,14 +39,16 @@ export default function DataFrame ({ tableName, rows, setRows } : DataFrameProps
       if (!response.ok) {
         throw new Error(`${body.error}`);
       } else {
-        alert(`${body.message}`);
+        setModalContent(`${body.message}`);
+        setModalTitle('Success!');
+        setOpen(true);
       }
   
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        console.log('weird error', error);
+        setModalContent(`${error.message}`);
+        setModalTitle('Something went wrong');
+        setOpen(true);
       }
     }
   };
@@ -61,14 +67,16 @@ const deleteRow = async (id: GridRowId) => {
       throw new Error(`${body.error}`);
     } else {
       setRows(rows.filter((row) => row[tableID] !== id));
-      alert(`${body.message}`);
+      setModalContent(`${body.message}`);
+      setModalTitle('Success!');
+      setOpen(true);
     }
 
   } catch (error) {
     if (error instanceof Error) {
-      alert(error.message);
-    } else {
-      console.log('weird error', error);
+      setModalContent(`${error.message}`);
+      setModalTitle('Something went wrong');
+      setOpen(true);
     }
   }
 }
@@ -100,7 +108,6 @@ const deleteColumn: GridColDef = {
             toolbar: GridToolbar,
           }}
           pageSizeOptions={[10]}
-          //checkboxSelection
           onRowSelectionModelChange={(e: any) => console.log(e)}
           disableRowSelectionOnClick
           initialState={{
@@ -113,6 +120,7 @@ const deleteColumn: GridColDef = {
           onCellEditStop={postChange}
           
         />
+        <Modal show={open} onClose={() => setOpen(false)} title={modalTitle} body={modalContent} />
     </div>
   )
 };

@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
           console.log('check', check, 'typedValue', typedValue)
           const [rows] = await pool.query(check.query, [typedValue]);
           if (!rows || !Array.isArray(rows) || rows.length === 0) {
-            console.log('rows', rows)
             return NextResponse.json({ error: `Invalid value for ${field}. Please Select a valid ${field} and try again.` }, { status: 400 })
           }
         }
