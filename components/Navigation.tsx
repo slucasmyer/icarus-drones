@@ -43,7 +43,7 @@ export default function Navigation() {
         <nav className={`hidden md:flex justify-between my-2 mx-24`}>
           <Link href={`/`}><h1 className={`transition-all duration-500 text-3xl text-bold hover:underline hover:scale-125 leading-relaxed`}>ICARUS DRONES</h1></Link>
           <IconButton onClick={() => setMenuOpen(true)} color="inherit">
-            <MenuIcon fontSize='large' />
+            <MenuIcon fontSize='large' className={`transition-all duration-500 text-3xl text-bold hover:scale-125`}/>
           </IconButton>
           <Drawer anchor="right" open={menuOpen} onClose={() => setMenuOpen(false)}>
             <List sx={{ width: 300, bgcolor: '#4338ca', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
